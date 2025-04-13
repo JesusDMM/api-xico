@@ -65,3 +65,19 @@ VALUES
 INSERT INTO especificacion_incidencias (salida_id, cantidad_defectuosos, causa, especificacion, created_at, updated_at)
 VALUES
 (1, 5, 'Manipulación', 'Paquetes mal sellados por presión incorrecta', NOW(), NOW());
+
+ALTER TABLE salidas DROP FOREIGN KEY salidas_ibfk_1;
+
+ALTER TABLE salidas
+ADD CONSTRAINT salidas_ibfk_1
+FOREIGN KEY (lote_id) REFERENCES lotes(id)
+ON DELETE CASCADE;
+
+ALTER TABLE especificacion_incidencias DROP FOREIGN KEY especificacion_incidencias_ibfk_1;
+
+ALTER TABLE especificacion_incidencias
+ADD CONSTRAINT especificacion_incidencias_ibfk_1
+FOREIGN KEY (salida_id) REFERENCES salidas(id)
+ON DELETE CASCADE;
+
+

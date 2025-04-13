@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LoteController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -17,4 +18,12 @@ Route::group(['middleware' => [JwtMiddleware::class]], function () {
 
     //This is an example you ought to erase it and create your own
     Route::get('/users', [UsersController::class, 'getAllUsers'])->name('getAllUsers');
+});
+
+Route::prefix('/lotes')->group(function () {
+    Route::get('', [LoteController::class, 'index']);
+    Route::post('', [LoteController::class, 'store']);
+    Route::get('/{id}', [LoteController::class, 'show']);
+    Route::patch('/{id}', [LoteController::class, 'update']);
+    Route::delete('/{id}', [LoteController::class, 'destroy']);
 });

@@ -22,4 +22,22 @@ class Constants
     public const INVALID_CREDENTIALS = 'Credenciales invalidas';
     public const USER_INACTIVE = 'El usuario se encuentra inactivo';
     public const LOGIN_SUCCESSFUL = 'El usuario se ha logueado correctamente';
+
+    const ERROR = 'Ocurrió un error inesperado';
+
+    //Lotes
+    const LOTE_CREATED = 'Lote creado correctamente';
+    const LOTE_UPDATED = 'Lote actualizado correctamente';
+    const LOTE_DELETED = 'Lote eliminado correctamente';
+    const LOTE_CREATE_ERROR = 'Error al crear el lote';
+    const LOTE_ID_DUPLICADO = 'El ID del lote ya existe';
+    const LOTE_NOT_FOUND = 'Lote no encontrado';
+    const LOTES_LISTED = 'Lotes obtenidos correctamente';
+    const LOTE_DETAIL = 'Detalle del lote obtenido correctamente';
+
+
+    const LOTE_UPDATE_ERROR = 'Error al actualizar el lote';
+    const LOTE_DELETE_ERROR = 'Error al eliminar el lote';
+    const LOTE_VALIDATION_ERROR = 'Los datos proporcionados para el lote no son válidos';
+    const LOTE_UPDATE_INVALID_STOCK = 'No se puede reducir el tamaño del lote porque el stock resultante sería negativo.';
 }
