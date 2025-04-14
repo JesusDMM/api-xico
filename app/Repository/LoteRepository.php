@@ -57,4 +57,44 @@ class LoteRepository implements LoteRepositoryInterface
     {
         return Lote::destroy($id);
     }
+
+    public function decreaseStock(Lote $lote, $cantidad)
+    {
+        if ($lote->stock >= $cantidad) {
+            $lote->stock -= $cantidad;
+            $lote->save();
+        } else {
+            return null;
+        }
+    }
+
+    public function increaseStock(Lote $lote, $cantidad)
+    {
+        $lote->stock += $cantidad;
+        $lote->save();
+        return $lote;
+    }
+
+    public function ajustarStockPorActualizacion(Lote $lote, int $cantidadAnterior, int $nuevaCantidad): bool
+    {
+        $diferencia = $nuevaCantidad - $cantidadAnterior;
+
+        if ($diferencia === 0) {
+            return true;
+        }
+
+        if ($diferencia < 0) {
+            $lote->stock += abs($diferencia);
+            $lote->save();
+            return true;
+        }
+
+        if ($lote->stock >= $diferencia) {
+            $lote->stock -= $diferencia;
+            $lote->save();
+            return true;
+        }
+
+        return false;
+    }
 }

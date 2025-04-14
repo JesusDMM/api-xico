@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LoteController;
+use App\Http\Controllers\SalidaController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,12 @@ Route::prefix('/lotes')->group(function () {
     Route::get('/{id}', [LoteController::class, 'show']);
     Route::patch('/{id}', [LoteController::class, 'update']);
     Route::delete('/{id}', [LoteController::class, 'destroy']);
+});
+
+Route::prefix('/salidas')->group(function () {
+    Route::get('', [SalidaController::class, 'index']);
+    Route::get('/{id}', [SalidaController::class, 'show']);
+    Route::post('', [SalidaController::class, 'store']);
+    Route::patch('/{id}', [SalidaController::class, 'update']);
+    Route::delete('/{id}', [SalidaController::class, 'destroy']);
 });
