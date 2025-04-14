@@ -40,4 +40,15 @@ class Constants
     const LOTE_DELETE_ERROR = 'Error al eliminar el lote';
     const LOTE_VALIDATION_ERROR = 'Los datos proporcionados para el lote no son válidos';
     const LOTE_UPDATE_INVALID_STOCK = 'No se puede reducir el tamaño del lote porque el stock resultante sería negativo.';
+
+    // Salidas
+    const SALIDA_NOT_FOUND = 'Salida no encontrada';
+    const SALIDA_NOT_AVAILABLE = 'No hay suficiente stock para esta salida';
+    const SALIDA_CREATE_ERROR = 'Error al crear la salida';
+    const SALIDA_CREATED = 'Salida creada con éxito';
+    const SALIDA_UPDATE_ERROR = 'Error al actualizar la salida';
+    const SALIDA_UPDATED = 'Salida actualizada con éxito';
+    const SALIDA_DELETED = 'Salida eliminada con éxito';
+    const SALIDA_DELETED_ERROR = 'Error al eliminar la salida';
+    const SALIDA_NO_STOCK_AVAILABLE = 'No hay suficiente stock disponible para actualizar la salida.';
 }

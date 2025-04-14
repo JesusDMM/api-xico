@@ -79,5 +79,3 @@ ALTER TABLE especificacion_incidencias
 ADD CONSTRAINT especificacion_incidencias_ibfk_1
 FOREIGN KEY (salida_id) REFERENCES salidas(id)
 ON DELETE CASCADE;
-
-
