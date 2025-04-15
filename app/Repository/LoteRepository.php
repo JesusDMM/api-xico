@@ -4,17 +4,18 @@ namespace App\Repository;
 
 use App\Models\Lote;
 use App\Interfaces\LoteRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class LoteRepository implements LoteRepositoryInterface
 {
     public function all()
     {
-        return Lote::select('id', 'tipo_producto', 'tamaño_lote', 'stock', 'caducidad')->get();
+        return Lote::select('id', 'producto_id', 'tamaño_lote', 'stock', 'caducidad')->get();
     }
 
     public function find($id)
     {
-        return Lote::select('id', 'tipo_producto', 'tamaño_lote', 'stock', 'caducidad')->find($id);
+        return Lote::select('id', 'producto_id', 'tamaño_lote', 'stock', 'caducidad')->find($id);
     }
 
     public function ExistsById($id)
@@ -25,7 +26,7 @@ class LoteRepository implements LoteRepositoryInterface
     public function create(array $data)
     {
         $lote = Lote::create($data);
-        return Lote::select('id', 'tipo_producto', 'tamaño_lote', 'stock', 'caducidad')->find($lote->id);
+        return Lote::select('id', 'producto_id', 'tamaño_lote', 'stock', 'caducidad')->find($lote->id);
     }
 
     public function update($id, array $data)
@@ -42,7 +43,7 @@ class LoteRepository implements LoteRepositoryInterface
             return null;
         }
 
-        $lote->tipo_producto = $data['tipo_producto'];
+        $lote->producto_id = $data['producto_id'];
         $lote->tamaño_lote = $nuevoTamaño;
         $lote->caducidad = $data['caducidad'];
         $lote->stock = $nuevoStock;
@@ -96,5 +97,94 @@ class LoteRepository implements LoteRepositoryInterface
         }
 
         return false;
+    }
+
+    public function getAllLotesConSalidasYIncidencias()
+    {
+        $lotes = DB::table('lotes')
+            ->join('productos', 'lotes.producto_id', '=', 'productos.id')
+            ->select(
+                'lotes.id as loteId',
+                'productos.nombre as productoLote',
+                'lotes.tamaño_lote as tamañoLote',
+                'lotes.stock',
+                'lotes.caducidad',
+                DB::raw("(
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'salidaId', salidas.id,
+                        'cantidad', salidas.cantidad,
+                        'usuarioNombre', usuarios.nombre,
+                        'incidencias', (
+                            SELECT JSON_ARRAYAGG(
+                                JSON_OBJECT(
+                                    'cantidad_defectuosos', ei.cantidad_defectuosos,
+                                    'causa', ei.causa,
+                                    'especificacion', ei.especificacion,
+                                    'destino', ei.destino
+                                )
+                            )
+                            FROM especificacion_incidencias ei
+                            WHERE ei.salida_id = salidas.id
+                        )
+                    )
+                )
+                FROM salidas
+                INNER JOIN usuarios ON salidas.usuario_id = usuarios.id
+                WHERE salidas.lote_id = lotes.id
+            ) as salidas")
+            )
+            ->get()
+            ->map(function ($lote) {
+                $lote->salidas = json_decode($lote->salidas, true);
+                return $lote;
+            });
+
+        return $lotes;
+    }
+
+    public function getLoteConSalidasYIncidencias($loteId)
+    {
+        $lotes = DB::table('lotes')
+            ->join('productos', 'lotes.producto_id', '=', 'productos.id')
+            ->where('lotes.id', $loteId)
+            ->select(
+                'lotes.id as loteId',
+                'productos.nombre as productoLote',
+                'lotes.tamaño_lote as tamañoLote',
+                'lotes.stock',
+                'lotes.caducidad',
+                DB::raw("(
+                SELECT JSON_ARRAYAGG(
+                    JSON_OBJECT(
+                        'salidaId', salidas.id,
+                        'cantidad', salidas.cantidad,
+                        'usuarioNombre', usuarios.nombre,
+                        'incidencias', (
+                            SELECT JSON_ARRAYAGG(
+                                JSON_OBJECT(
+                                    'cantidad_defectuosos', ei.cantidad_defectuosos,
+                                    'causa', ei.causa,
+                                    'especificacion', ei.especificacion,
+                                    'destino', ei.destino
+                                )
+                            )
+                            FROM especificacion_incidencias ei
+                            WHERE ei.salida_id = salidas.id
+                        )
+                    )
+                )
+                FROM salidas
+                INNER JOIN usuarios ON salidas.usuario_id = usuarios.id
+                WHERE salidas.lote_id = lotes.id
+            ) as salidas")
+            )
+            ->get()
+            ->map(function ($lote) {
+                $lote->salidas = json_decode($lote->salidas, true);
+                return $lote;
+            });
+
+        return $lotes;
     }
 }
