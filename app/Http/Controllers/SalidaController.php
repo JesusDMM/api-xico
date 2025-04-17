@@ -56,8 +56,12 @@ class SalidaController extends Controller
 
             $lote = $this->loteRepo->find($data['lote_id']);
 
-            if (!$lote || $lote->stock < $data['cantidad']) {
-                return ApiResponseClass::sendResponse(false, null, Constants::SALIDA_CREATE_ERROR, 400);
+            if (!$lote) {
+                return ApiResponseClass::sendResponse(false, null, Constants::LOTE_NOT_FOUND, 400);
+            }
+
+            if ($lote->stock < $data['cantidad']) {
+                return ApiResponseClass::sendResponse(false, null, Constants::SALIDA_NOT_AVAILABLE, 400);
             }
 
             $this->loteRepo->decreaseStock($lote, $data['cantidad']);

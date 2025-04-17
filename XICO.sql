@@ -1,3 +1,5 @@
+DROP DATABASE Xico;
+
 CREATE DATABASE Xico;
 
 USE Xico;
@@ -41,30 +43,55 @@ CREATE TABLE `especificacion_incidencias` (
   `updated_at` timestamp NOT NULL
 );
 
+ALTER TABLE `especificacion_incidencias`
+ADD COLUMN `destino` ENUM('Reproceso', 'Reempacado', 'Desperdicio') NOT NULL;
+
+CREATE TABLE `productos` (
+  `id` INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  `nombre` VARCHAR(255) NOT NULL,
+  `presentacion` INT NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
 ALTER TABLE `salidas` ADD FOREIGN KEY (`lote_id`) REFERENCES `lotes` (`id`);
 
 ALTER TABLE `salidas` ADD FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
 
 ALTER TABLE `especificacion_incidencias` ADD FOREIGN KEY (`salida_id`) REFERENCES `salidas` (`id`);
 
+ALTER TABLE lotes DROP COLUMN tipo_producto;
+
+ALTER TABLE lotes ADD COLUMN producto_id INT NULL;
+
+ALTER TABLE productos ADD COLUMN categoria varchar(255) NOT NULL;
+
+ALTER TABLE lotes ADD CONSTRAINT fk_lotes_producto
+  FOREIGN KEY (producto_id) REFERENCES productos(id)
+  ON DELETE SET NULL;
+
 INSERT INTO usuarios (nombre, apellido, nombre_usuario, contraseña, created_at, updated_at)
 VALUES 
-('Ana', 'López', 'analo', 'secret123', NOW(), NOW()),
-('Carlos', 'Ramírez', 'carlosr', 'clave456', NOW(), NOW());
+('Noelia', 'Gonzalez', 'Noelia', 'clave4862', NOW(), NOW()),
+('Fidel', 'Leyva', 'Fidel', 'clave7913', NOW(), NOW()),
+('Javier', 'Trejo', 'Trejo', 'clave7948', NOW(), NOW()),
+('Blanca', 'Mosqueda', 'Blanca', 'clave8273', NOW(), NOW());
 
-INSERT INTO lotes (id, tipo_producto, tamaño_lote, stock, caducidad, created_at, updated_at)
+INSERT INTO lotes (id, producto_id, tamaño_lote, stock, caducidad, created_at, updated_at)
 VALUES
-('L001', 'Salchicha', 100, 75, '2025-06-30', NOW(), NOW()),
-('L002', 'Jamón', 200, 185, '2025-07-15', NOW(), NOW());
+('L003', 2, 120, 95, '2025-06-01', NOW(), NOW()),
+('L004', 5, 200, 185, '2025-06-15', NOW(), NOW()),
+('L005', 7, 300, 300, '2025-07-10', NOW(), NOW()),
+('L006', 7, 180, 180, '2025-07-25', NOW(), NOW());
 
 INSERT INTO salidas (lote_id, cantidad, usuario_id, created_at, updated_at)
 VALUES
-('L001', 20, 1, NOW(), NOW()),
-('L002', 15, 2, NOW(), NOW());
+('L003', 20, 1, NOW(), NOW()),
+('L004', 15, 2, NOW(), NOW());
 
-INSERT INTO especificacion_incidencias (salida_id, cantidad_defectuosos, causa, especificacion, created_at, updated_at)
+INSERT INTO especificacion_incidencias (salida_id, cantidad_defectuosos, causa, especificacion, destino, created_at, updated_at)
 VALUES
-(1, 5, 'Manipulación', 'Paquetes mal sellados por presión incorrecta', NOW(), NOW());
+(1, 5, 'Manipulación', 'Paquetes mal sellados por presión incorrecta', 'Reproceso', NOW(), NOW());
 
 ALTER TABLE salidas DROP FOREIGN KEY salidas_ibfk_1;
 
