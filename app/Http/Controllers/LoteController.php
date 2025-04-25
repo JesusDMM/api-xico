@@ -39,7 +39,7 @@ class LoteController extends Controller
         try {
             $request->validate([
                 'id' => 'required|string|max:255',
-                'producto_id' => 'required|int|min:1',
+                'producto_id' => 'required|integer|min:1',
                 'tamaño_lote' => 'required|integer|min:1',
                 'caducidad' => 'required|date',
             ]);
@@ -72,7 +72,7 @@ class LoteController extends Controller
     {
         try {
             $request->validate([
-                'producto_id' => 'required|int|min:1',
+                'producto_id' => 'required|integer|min:1',
                 'tamaño_lote' => 'required|integer|min:1',
                 'caducidad' => 'required|date',
             ]);
