@@ -10,30 +10,55 @@ class EspecificacionIncidenciaRepository implements EspecificacionIncidenciaRepo
 {
     public function all()
     {
-        return EspecificacionIncidencia::join('salidas', 'salidas.id', '=', 'especificacion_incidencias.salida_id')
+        return EspecificacionIncidencia::from('especificacion_incidencias as ei')
             ->select(
-                'especificacion_incidencias.id',
-                'especificacion_incidencias.salida_id',
-                'especificacion_incidencias.cantidad_defectuosos',
-                'especificacion_incidencias.causa',
-                'especificacion_incidencias.especificacion'
+                'ei.id',
+                'ei.salida_id',
+                'ei.cantidad_defectuosos',
+                'ei.causa',
+                'ei.especificacion',
+                'ei.destino',
+                'u.nombre AS usuario_nombre',
+                'p.nombre as nombre_producto',
+                'p.presentacion',
+                'p.categoria',
+                'l.id as lote_id',
+                'l.caducidad as lote_caducidad'
             )
+            ->join('salidas as s', 's.id', '=', 'ei.salida_id')
+            ->join('usuarios as u', 'u.id', '=', 's.usuario_id')
+            ->join('lotes as l', 'l.id', '=', 's.lote_id')
+            ->join('productos as p', 'p.id', '=', 'l.producto_id')
+            ->orderBy('ei.id')
             ->get();
     }
 
+
     public function find($id)
     {
-        return EspecificacionIncidencia::join('salidas', 'salidas.id', '=', 'especificacion_incidencias.salida_id')
+        return EspecificacionIncidencia::from('especificacion_incidencias as ei')
             ->select(
-                'especificacion_incidencias.id',
-                'especificacion_incidencias.salida_id',
-                'especificacion_incidencias.cantidad_defectuosos',
-                'especificacion_incidencias.causa',
-                'especificacion_incidencias.especificacion'
+                'ei.id',
+                'ei.salida_id',
+                'ei.cantidad_defectuosos',
+                'ei.causa',
+                'ei.especificacion',
+                'ei.destino',
+                'u.nombre AS usuario_nombre',
+                'p.nombre as nombre_producto',
+                'p.presentacion',
+                'p.categoria',
+                'l.id as lote_id',
+                'l.caducidad as lote_caducidad'
             )
-            ->where('especificacion_incidencias.id', $id)
+            ->join('salidas as s', 's.id', '=', 'ei.salida_id')
+            ->join('usuarios as u', 'u.id', '=', 's.usuario_id')
+            ->join('lotes as l', 'l.id', '=', 's.lote_id')
+            ->join('productos as p', 'p.id', '=', 'l.producto_id')
+            ->where('ei.id', $id)
             ->first();
     }
+
 
 
     public function create(array $data)
@@ -83,15 +108,26 @@ class EspecificacionIncidenciaRepository implements EspecificacionIncidenciaRepo
 
     public function getByLoteId($loteId)
     {
-        return EspecificacionIncidencia::join('salidas', 'salidas.id', '=', 'especificacion_incidencias.salida_id')
-            ->where('salidas.lote_id', $loteId)
+        return EspecificacionIncidencia::from('especificacion_incidencias as ei')
             ->select(
-                'especificacion_incidencias.id',
-                'especificacion_incidencias.salida_id',
-                'especificacion_incidencias.cantidad_defectuosos',
-                'especificacion_incidencias.causa',
-                'especificacion_incidencias.especificacion'
+                'ei.id',
+                'ei.salida_id',
+                'ei.cantidad_defectuosos',
+                'ei.causa',
+                'ei.especificacion',
+                'ei.destino',
+                'u.nombre AS usuario_nombre',
+                'p.nombre as nombre_producto',
+                'p.presentacion',
+                'p.categoria',
+                'l.id as lote_id',
+                'l.caducidad as lote_caducidad'
             )
-            ->get();
+            ->join('salidas as s', 's.id', '=', 'ei.salida_id')
+            ->join('usuarios as u', 'u.id', '=', 's.usuario_id')
+            ->join('lotes as l', 'l.id', '=', 's.lote_id')
+            ->join('productos as p', 'p.id', '=', 'l.producto_id')
+            ->where('l.id', $loteId)
+            ->first();
     }
 }

@@ -10,13 +10,39 @@ class LoteRepository implements LoteRepositoryInterface
 {
     public function all()
     {
-        return Lote::select('id', 'producto_id', 'tamaño_lote', 'stock', 'caducidad')->get();
+        return Lote::from('lotes as l')
+            ->select(
+                'l.id',
+                'l.producto_id',
+                'p.nombre as nombre_producto',
+                'p.presentacion',
+                'p.categoria',
+                'l.tamaño_lote',
+                'l.stock',
+                'l.caducidad'
+            )
+            ->join('productos as p', 'l.producto_id', '=', 'p.id')
+            ->get();
     }
 
     public function find($id)
     {
-        return Lote::select('id', 'producto_id', 'tamaño_lote', 'stock', 'caducidad')->find($id);
+        return Lote::from('lotes as l')
+            ->select(
+                'l.id',
+                'l.producto_id',
+                'p.nombre as nombre_producto',
+                'p.presentacion',
+                'p.categoria',
+                'l.tamaño_lote',
+                'l.stock',
+                'l.caducidad'
+            )
+            ->join('productos as p', 'l.producto_id', '=', 'p.id')
+            ->where('l.id', $id)
+            ->first();
     }
+
 
     public function ExistsById($id)
     {
@@ -50,7 +76,7 @@ class LoteRepository implements LoteRepositoryInterface
 
         $lote->save();
 
-        return $lote;
+        return Lote::select('id', 'producto_id', 'tamaño_lote', 'stock', 'caducidad')->find($lote->id);
     }
 
 
@@ -106,6 +132,8 @@ class LoteRepository implements LoteRepositoryInterface
             ->select(
                 'lotes.id as loteId',
                 'productos.nombre as productoLote',
+                'productos.categoria',
+                'productos.presentacion',
                 'lotes.tamaño_lote as tamañoLote',
                 'lotes.stock',
                 'lotes.caducidad',
@@ -151,6 +179,8 @@ class LoteRepository implements LoteRepositoryInterface
             ->select(
                 'lotes.id as loteId',
                 'productos.nombre as productoLote',
+                'productos.categoria',
+                'productos.presentacion',
                 'lotes.tamaño_lote as tamañoLote',
                 'lotes.stock',
                 'lotes.caducidad',

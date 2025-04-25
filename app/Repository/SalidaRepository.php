@@ -11,22 +11,38 @@ class SalidaRepository implements SalidaRepositoryInterface
     {
         return Salida::join('usuarios', 'salidas.usuario_id', '=', 'usuarios.id')
             ->join('lotes', 'salidas.lote_id', '=', 'lotes.id')
-            ->select('salidas.id AS salida_id', 'salidas.cantidad', 'usuarios.nombre AS usuario_nombre', 'lotes.tipo_producto AS producto_lote', 'lotes.id AS lote_id')
+            ->join('productos', 'lotes.producto_id', '=', 'productos.id')
+            ->select(
+                'salidas.id AS salida_id',
+                'salidas.cantidad',
+                'salidas.created_at AS salida_fecha',
+                'usuarios.nombre AS usuario_nombre',
+                'productos.nombre AS producto_nombre',
+                'productos.presentacion AS producto_presentacion',
+                'lotes.stock AS producto_stock',
+                'lotes.caducidad as lote_caducidad',
+                'lotes.id AS lote_id'
+            )
             ->get();
     }
 
     public function find($id)
     {
-        return Salida::join('usuarios', 'salidas.usuario_id', '=', 'usuarios.id')
+        return Salida::select(
+            'salidas.id AS salida_id',
+            'salidas.cantidad',
+            'salidas.created_at AS salida_fecha',
+            'usuarios.nombre AS usuario_nombre',
+            'productos.nombre AS producto_nombre',
+            'productos.presentacion AS producto_presentacion',
+            'lotes.stock AS producto_stock',
+            'lotes.caducidad as lote_caducidad',
+            'lotes.id AS lote_id'
+        )
+            ->join('usuarios', 'salidas.usuario_id', '=', 'usuarios.id')
             ->join('lotes', 'salidas.lote_id', '=', 'lotes.id')
+            ->join('productos', 'lotes.producto_id', '=', 'productos.id')
             ->where('salidas.lote_id', $id)
-            ->select(
-                'salidas.id AS salida_id',
-                'salidas.cantidad',
-                'usuarios.nombre AS usuario_nombre',
-                'lotes.tipo_producto AS producto_lote',
-                'lotes.id AS lote_id'
-            )
             ->get();
     }
 
@@ -46,16 +62,20 @@ class SalidaRepository implements SalidaRepositoryInterface
 
         $salida = Salida::create($data);
 
-        return Salida::join('lotes', 'salidas.lote_id', '=', 'lotes.id')
+        return Salida::select(
+            'salidas.id AS salida_id',
+            'salidas.cantidad',
+            'salidas.created_at AS salida_fecha',
+            'usuarios.nombre AS usuario_nombre',
+            'productos.nombre AS producto_nombre',
+            'productos.presentacion AS producto_presentacion',
+            'lotes.stock AS producto_stock',
+            'lotes.caducidad as lote_caducidad',
+            'lotes.id AS lote_id'
+        )
             ->join('usuarios', 'salidas.usuario_id', '=', 'usuarios.id')
-            ->select(
-                'salidas.id',
-                'salidas.lote_id',
-                'salidas.cantidad',
-                'salidas.usuario_id',
-                'lotes.tipo_producto',
-                'usuarios.nombre as usuario_nombre'
-            )
+            ->join('lotes', 'salidas.lote_id', '=', 'lotes.id')
+            ->join('productos', 'lotes.producto_id', '=', 'productos.id')
             ->where('salidas.id', $salida->id)
             ->first();
     }
@@ -70,16 +90,21 @@ class SalidaRepository implements SalidaRepositoryInterface
 
         $salida->update($data);
 
-        return Salida::join('usuarios', 'salidas.usuario_id', '=', 'usuarios.id')
+        return Salida::select(
+            'salidas.id AS salida_id',
+            'salidas.cantidad',
+            'salidas.created_at AS salida_fecha',
+            'usuarios.nombre AS usuario_nombre',
+            'productos.nombre AS producto_nombre',
+            'productos.presentacion AS producto_presentacion',
+            'lotes.stock AS producto_stock',
+            'lotes.caducidad as lote_caducidad',
+            'lotes.id AS lote_id'
+        )
+            ->join('usuarios', 'salidas.usuario_id', '=', 'usuarios.id')
             ->join('lotes', 'salidas.lote_id', '=', 'lotes.id')
+            ->join('productos', 'lotes.producto_id', '=', 'productos.id')
             ->where('salidas.id', $salida->id)
-            ->select(
-                'salidas.id AS salida_id',
-                'salidas.cantidad',
-                'usuarios.nombre AS usuario_nombre',
-                'lotes.tipo_producto AS producto_lote',
-                'lotes.id AS lote_id'
-            )
             ->first();
     }
 
