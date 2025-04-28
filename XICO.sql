@@ -63,6 +63,12 @@ CREATE TABLE `sessions` (
   INDEX (`user_id`)
 );
 
+CREATE TABLE `cache` (
+  `key` VARCHAR(255) PRIMARY KEY NOT NULL,
+  `value` LONGTEXT NOT NULL,
+  `expiration` INT NOT NULL
+);
+
 ALTER TABLE `sessions`
 ADD CONSTRAINT `fk_sessions_user`
 FOREIGN KEY (`user_id`) REFERENCES `usuarios` (`id`)

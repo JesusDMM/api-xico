@@ -10,4 +10,5 @@ interface AuthRepositoryInterface
     public function createRefreshToken($request);
     public function getRefreshTokenByUserId($userId);
     public function doesRefreshTokenExist(string $refreshToken);
+    public function findByUsername($username);
 }

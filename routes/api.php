@@ -19,7 +19,6 @@ Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.r
 //All calls inside the next group it'll work asking for jwt token
 Route::group(['middleware' => [JwtMiddleware::class]], function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
-    Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->name('auth.refreshToken');
 
     //This is an example you ought to erase it and create your own
     Route::get('/users', [UsersController::class, 'getAllUsers'])->name('getAllUsers');

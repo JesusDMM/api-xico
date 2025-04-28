@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Interfaces\AuthRepositoryInterface;
 use App\Models\RefreshToken;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthRepository implements AuthRepositoryInterface
 {
@@ -13,8 +14,9 @@ class AuthRepository implements AuthRepositoryInterface
         return User::create($data);
     }
 
-    public function login($request)
+    public function login($credentials)
     {
+        return JWTAuth::attempt($credentials);
     }
 
     public function deleteRefreshToken($id)
@@ -35,5 +37,10 @@ class AuthRepository implements AuthRepositoryInterface
     public function doesRefreshTokenExist($refreshToken)
     {
         return RefreshToken::where('refresh_token', $refreshToken)->first();
+    }
+
+    public function findByUsername($username)
+    {
+        return User::where('nombre_usuario', $username)->first();
     }
 }
