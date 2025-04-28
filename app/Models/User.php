@@ -12,15 +12,15 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'users';
+    protected $table = 'usuarios';
 
-    protected $primaryKey = 'user_id';
+    protected $primaryKey = 'id';
 
-    //Erase this comment and add your own attributes
     protected $fillable = [
-        'name',
-        'email',
-        'password'
+        'nombre',
+        'apellido',
+        'nombre_usuario',
+        'contraseña',
     ];
 
     public $incrementing = true;
@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $hidden = [
-        'password'
+        'contraseña',
     ];
 
     /**
