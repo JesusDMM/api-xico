@@ -22,6 +22,9 @@ class Constants
     public const INVALID_CREDENTIALS = 'Credenciales invalidas';
     public const USER_INACTIVE = 'El usuario se encuentra inactivo';
     public const LOGIN_SUCCESSFUL = 'El usuario se ha logueado correctamente';
+    public const USER_REGISTERED_SUCCESSFULLY = 'Usuario registrado exitosamente';
+    public const USER_REGISTRATION_FAILED = 'Error al registrar el usuario';
+    public const USER_NOT_FOUND = 'Usuario no encontrado';
 
     const ERROR = 'Ocurrió un error inesperado';
 
@@ -51,4 +54,16 @@ class Constants
     const SALIDA_DELETED = 'Salida eliminada con éxito';
     const SALIDA_DELETED_ERROR = 'Error al eliminar la salida';
     const SALIDA_NO_STOCK_AVAILABLE = 'No hay suficiente stock disponible para actualizar la salida.';
+    const SALIDAS_NOT_FOUND = 'No se encontraron salidas para el lote especificado';
+
+    // Incidencia
+    const INCIDENCIA_CREATED = 'Incidencia creada con éxito';
+    const INCIDENCIA_CREATE_ERROR = 'Hubo un error al crear la incidencia';
+    const INCIDENCIA_UPDATE_ERROR = 'Hubo un error al actualizar la incidencia';
+    const INCIDENCIA_UPDATED = 'Incidencia actualizada con éxito';
+    const INCIDENCIA_DELETED = 'Incidencia eliminada con éxito';
+    const INCIDENCIA_DELETE_ERROR = 'Error al eliminar una incidencia.';
+    const INCIDENCIA_NOT_FOUND = 'Incidencia no encontrada';
+    const INCIDENCIA_NO_STOCK_AVAILABLE = 'No hay suficiente stock disponible para la incidencia';
+    const INCIDENCIAS_NOT_FOUND = 'No se encontraron incidencias para la salida especificada';
 }

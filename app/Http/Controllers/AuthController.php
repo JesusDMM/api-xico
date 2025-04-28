@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Classes\ApiResponseClass;
 use App\Interfaces\AuthRepositoryInterface;
-use App\Models\RefreshToken;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -33,16 +32,32 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $validatedData = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
+            'nombre_usuario' => 'required|string|max:255|unique:usuarios,nombre_usuario',
+            'contraseña' => 'required|string',
+        ]);
+
+        $validatedData['contraseña'] = Hash::make($validatedData['contraseña']);
+
+        $user = $this->authRepository->register($validatedData);
+
+        if (!$user) {
+            return ApiResponseClass::sendResponse(false, null, Constants::USER_REGISTRATION_FAILED, 400);
+        }
+
+        return ApiResponseClass::sendResponse(true, $user->toArray(), Constants::USER_REGISTERED_SUCCESSFULLY, 201);
     }
 
     public function login(Request $request)
     {
+        $credentials = $request->only('nombre_usuario', 'contraseña');
 
-        $credentials = $request->only('email', 'password');
+        // Buscar el usuario por nombre_usuario
+        $user = $this->authRepository->findByUsername($credentials['nombre_usuario']);
 
-        $token = JWTAuth::attempt($credentials);
-
-        if (!$token) {
+        if (!$user || !Hash::check($credentials['contraseña'], $user->contraseña)) {
             return ApiResponseClass::sendResponse(
                 false,
                 null,
@@ -51,77 +66,18 @@ class AuthController extends Controller
             );
         }
 
-        $user = auth()->user();
-
-        // Refresh token data, delete if is unused
-        $refreshToken = bin2hex(random_bytes(32));
-        $hashedRefreshToken = Hash::make($refreshToken);
-        $now = now()->addDays(14);
-        $refreshTokenRequest = [
-            'user_id' => $user->user_id,
-            'refresh_token' => $hashedRefreshToken,
-            'expires_at' => $now
-        ];
-        $refreshTokenData = $this->authRepository->createRefreshToken($refreshTokenRequest);
-        if ($refreshTokenData == null) {
-            return ApiResponseClass::sendResponse(
-                false,
-                null,
-                Constants::REFRESH_TOKEN_ERROR,
-                400
-            );
-        }
-
-        if ($user->status === "inactive") {
-            return ApiResponseClass::sendResponse(
-                false,
-                null,
-                Constants::USER_INACTIVE,
-                400
-            );
-        }
+        // Generar el token JWT
+        $token = JWTAuth::fromUser($user);
 
         return ApiResponseClass::sendResponse(
             true,
             [
                 "user" => $user->toArray(),
-                "access_token" => $token,
-                "refresh_token" => $refreshToken
+                "access_token" => $token
             ],
             Constants::LOGIN_SUCCESSFUL,
             200
         );
-    }
-
-    // Use it just if refresh token will be implemented
-    public function refreshToken(Request $request)
-    {
-        $refreshToken = $request->input('refreshToken');
-        // Search for the refresh token in the database
-        $refreshTokenData = $this->authRepository->getRefreshTokenByUserId(auth()->id());
-        if ($refreshTokenData->isEmpty()) {
-            return ApiResponseClass::sendResponse(false, null, Constants::TOKEN_REFRESH_NOT_FOUND, 401);
-        }
-
-        foreach ($refreshTokenData as $data) {
-            if (Hash::check($refreshToken, $data->refresh_token)) {
-
-                // Check if the refresh token has expired
-                if (now() > Carbon::parse($data->expires_at)) {
-                    return ApiResponseClass::sendResponse(false, null, Constants::REFRESH_TOKEN_HAS_EXPIRE, 401);
-                }
-
-                $user = auth()->user();
-                $newToken = JWTAuth::fromUser($user);
-                $newTokenData = [
-                    'access_token' => $newToken
-                ];
-
-                return ApiResponseClass::sendResponse(true, $newTokenData, Constants::TOKEN_REFRESHED);
-            }
-        }
-
-        return ApiResponseClass::sendResponse(false, null, Constants::INVALID_TOKEN_REFRESH, 401);
     }
 
     // Use it just if refresh token will be implemented

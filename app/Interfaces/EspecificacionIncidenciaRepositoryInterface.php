@@ -2,14 +2,13 @@
 
 namespace App\Interfaces;
 
-interface SalidaRepositoryInterface
+interface EspecificacionIncidenciaRepositoryInterface
 {
     public function all();
     public function find($id);
-    public function ExistsById($id);
-    public function findById($id);
     public function create(array $data);
     public function update($id, array $data);
     public function delete($id);
-    public function findByLoteId($loteId);
+    public function getByLoteId($loteId);
+    public function getBySalidaId($salidaId);
 }

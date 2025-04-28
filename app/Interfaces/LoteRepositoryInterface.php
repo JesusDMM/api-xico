@@ -15,4 +15,6 @@ interface LoteRepositoryInterface
     public function decreaseStock(Lote $lote, $cantidad);
     public function increaseStock(Lote $lote, $cantidad);
     public function ajustarStockPorActualizacion(Lote $lote, int $cantidadAnterior, int $nuevaCantidad): bool;
+    public function getAllLotesConSalidasYIncidencias();
+    public function getLoteConSalidasYIncidencias($loteId);
 }

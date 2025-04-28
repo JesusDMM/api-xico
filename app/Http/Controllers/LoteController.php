@@ -39,8 +39,8 @@ class LoteController extends Controller
         try {
             $request->validate([
                 'id' => 'required|string|max:255',
-                'tipo_producto' => 'required|string|max:255',
-                'tamaño_lote' => 'required|integer',
+                'producto_id' => 'required|integer|min:1',
+                'tamaño_lote' => 'required|integer|min:1',
                 'caducidad' => 'required|date',
             ]);
 
@@ -72,8 +72,8 @@ class LoteController extends Controller
     {
         try {
             $request->validate([
-                'tipo_producto' => 'required|string|max:255',
-                'tamaño_lote' => 'required|integer',
+                'producto_id' => 'required|integer|min:1',
+                'tamaño_lote' => 'required|integer|min:1',
                 'caducidad' => 'required|date',
             ]);
 
@@ -104,6 +104,27 @@ class LoteController extends Controller
             $this->repo->delete($id);
 
             return ApiResponseClass::sendResponse(true, null, Constants::LOTE_DELETED);
+        } catch (\Throwable $e) {
+            return ApiResponseClass::throw($e->getMessage());
+        }
+    }
+
+    public function getLotesConSalidasYIncidencias()
+    {
+        try {
+            $lotes = $this->repo->getAllLotesConSalidasYIncidencias();
+
+            return ApiResponseClass::sendResponse(true, $lotes->toArray(), Constants::SUCCESS);
+        } catch (\Throwable $e) {
+            return ApiResponseClass::throw($e->getMessage());
+        }
+    }
+
+    public function getLoteConSalidasYIncidencias($loteId)
+    {
+        try {
+            $lote = $this->repo->getLoteConSalidasYIncidencias($loteId);
+            return ApiResponseClass::sendResponse(true, $lote->toArray(), Constants::SUCCESS);
         } catch (\Throwable $e) {
             return ApiResponseClass::throw($e->getMessage());
         }

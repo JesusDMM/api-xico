@@ -24,4 +24,13 @@ class UsersController extends Controller
         $usersData = $this->userRepository->getAllUsers();
         return ApiResponseClass::sendResponse(true, $usersData->toArray(), Constants::SUCCESS);
     }
+
+    public function getUserById($id)
+    {
+        $user = $this->userRepository->getUserById($id);
+        if (!$user) {
+            return ApiResponseClass::sendResponse(false, null, Constants::USER_NOT_FOUND, 404);
+        }
+        return ApiResponseClass::sendResponse(true, $user->toArray(), Constants::SUCCESS);
+    }
 }
