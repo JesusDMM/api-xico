@@ -28,16 +28,10 @@ class SalidaController extends Controller
 
     public function show($id)
     {
-        $loteExists = $this->loteRepo->ExistsById($id);
-
-        if (!$loteExists) {
-            return ApiResponseClass::sendResponse(false, null, Constants::LOTE_NOT_FOUND, 404);
-        }
-
-        $salida = $this->salidaRepo->find($id);
+        $salida = $this->salidaRepo->findById($id);
 
         if (!$salida) {
-            return ApiResponseClass::sendResponse(false, null, Constants::FAILED, 404);
+            return ApiResponseClass::sendResponse(false, null, Constants::SALIDA_NOT_FOUND, 404);
         }
 
         return ApiResponseClass::sendResponse(true, $salida->toArray(), Constants::SUCCESS);
@@ -114,7 +108,6 @@ class SalidaController extends Controller
         }
     }
 
-
     public function destroy($id)
     {
         try {
@@ -138,5 +131,22 @@ class SalidaController extends Controller
         } catch (\Throwable $e) {
             return ApiResponseClass::throw($e->getMessage());
         }
+    }
+
+    public function getByLoteId($loteId)
+    {
+        $lote = $this->loteRepo->find($loteId);
+
+        if (!$lote) {
+            return ApiResponseClass::sendResponse(false, null, Constants::LOTE_NOT_FOUND, 404);
+        }
+
+        $salidas = $this->salidaRepo->findByLoteId($loteId);
+
+        if ($salidas->isEmpty()) {
+            return ApiResponseClass::sendResponse(false, null, Constants::SALIDAS_NOT_FOUND, 404);
+        }
+
+        return ApiResponseClass::sendResponse(true, $salidas->toArray(), Constants::SUCCESS);
     }
 }

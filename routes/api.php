@@ -36,21 +36,19 @@ Route::prefix('/lotes')->group(function () {
 Route::prefix('/salidas')->group(function () {
     Route::get('', [SalidaController::class, 'index']);
     Route::get('/{id}', [SalidaController::class, 'show']);
+    Route::get('/lote/{lote_id}', [SalidaController::class, 'getByLoteId']);
     Route::post('', [SalidaController::class, 'store']);
     Route::patch('/{id}', [SalidaController::class, 'update']);
     Route::delete('/{id}', [SalidaController::class, 'destroy']);
 });
 
 Route::prefix('/incidencias')->group(function () {
-
     Route::get('', [EspecificacionIncidenciaController::class, 'index']);
-
-    Route::get('/{lote_id}', [EspecificacionIncidenciaController::class, 'getByLoteId']);
-
+    Route::get('/{id}', [EspecificacionIncidenciaController::class, 'show']);
+    Route::get('/lote/{lote_id}', [EspecificacionIncidenciaController::class, 'getByLoteId']);
+    Route::get('/salida/{salida_id}', [EspecificacionIncidenciaController::class, 'getBySalidaId']);
     Route::post('', [EspecificacionIncidenciaController::class, 'store']);
-
     Route::patch('/{id}', [EspecificacionIncidenciaController::class, 'update']);
-
     Route::delete('/{id}', [EspecificacionIncidenciaController::class, 'destroy']);
 });
 

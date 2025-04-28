@@ -10,4 +10,5 @@ interface EspecificacionIncidenciaRepositoryInterface
     public function update($id, array $data);
     public function delete($id);
     public function getByLoteId($loteId);
+    public function getBySalidaId($salidaId);
 }

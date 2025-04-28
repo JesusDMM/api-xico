@@ -51,6 +51,7 @@ class Constants
     const SALIDA_DELETED = 'Salida eliminada con éxito';
     const SALIDA_DELETED_ERROR = 'Error al eliminar la salida';
     const SALIDA_NO_STOCK_AVAILABLE = 'No hay suficiente stock disponible para actualizar la salida.';
+    const SALIDAS_NOT_FOUND = 'No se encontraron salidas para el lote especificado';
 
     // Incidencia
     const INCIDENCIA_CREATED = 'Incidencia creada con éxito';
@@ -61,4 +62,5 @@ class Constants
     const INCIDENCIA_DELETE_ERROR = 'Error al eliminar una incidencia.';
     const INCIDENCIA_NOT_FOUND = 'Incidencia no encontrada';
     const INCIDENCIA_NO_STOCK_AVAILABLE = 'No hay suficiente stock disponible para la incidencia';
+    const INCIDENCIAS_NOT_FOUND = 'No se encontraron incidencias para la salida especificada';
 }

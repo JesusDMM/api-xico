@@ -56,6 +56,25 @@ class SalidaRepository implements SalidaRepositoryInterface
         return Salida::find($id);
     }
 
+    public function findByLoteId($loteId)
+    {
+        return Salida::join('usuarios', 'salidas.usuario_id', '=', 'usuarios.id')
+            ->join('lotes', 'salidas.lote_id', '=', 'lotes.id')
+            ->join('productos', 'lotes.producto_id', '=', 'productos.id')
+            ->select(
+                'salidas.id AS salida_id',
+                'salidas.cantidad',
+                'salidas.created_at AS salida_fecha',
+                'usuarios.nombre AS usuario_nombre',
+                'productos.nombre AS producto_nombre',
+                'productos.presentacion AS producto_presentacion',
+                'lotes.stock AS producto_stock',
+                'lotes.caducidad as lote_caducidad',
+                'lotes.id AS lote_id'
+            )
+            ->where('salidas.lote_id', $loteId)
+            ->get();
+    }
 
     public function create(array $data)
     {

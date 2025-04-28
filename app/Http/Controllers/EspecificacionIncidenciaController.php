@@ -172,4 +172,21 @@ class EspecificacionIncidenciaController extends Controller
         $incidencias = $this->repo->getByLoteId($loteId);
         return ApiResponseClass::sendResponse(true, $incidencias->toArray(), Constants::SUCCESS);
     }
+
+    public function getBySalidaId($salidaId)
+    {
+        $salida = $this->salidaRepo->findById($salidaId);
+
+        if (!$salida) {
+            return ApiResponseClass::sendResponse(false, null, Constants::SALIDA_NOT_FOUND, 404);
+        }
+
+        $incidencias = $this->repo->getBySalidaId($salidaId);
+
+        if ($incidencias->isEmpty()) {
+            return ApiResponseClass::sendResponse(false, null, Constants::INCIDENCIAS_NOT_FOUND, 404);
+        }
+
+        return ApiResponseClass::sendResponse(true, $incidencias->toArray(), Constants::SUCCESS);
+    }
 }
