@@ -22,6 +22,9 @@ class Constants
     public const INVALID_CREDENTIALS = 'Credenciales invalidas';
     public const USER_INACTIVE = 'El usuario se encuentra inactivo';
     public const LOGIN_SUCCESSFUL = 'El usuario se ha logueado correctamente';
+    public const USER_REGISTERED_SUCCESSFULLY = 'Usuario registrado exitosamente';
+    public const USER_REGISTRATION_FAILED = 'Error al registrar el usuario';
+    public const USER_NOT_FOUND = 'Usuario no encontrado';
 
     const ERROR = 'Ocurrió un error inesperado';
 

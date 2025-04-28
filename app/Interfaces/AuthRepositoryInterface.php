@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface AuthRepositoryInterface
 {
-    public function register($request);
+    public function register($data);
     public function login($request);
     public function deleteRefreshToken(string $refreshToken);
     public function createRefreshToken($request);

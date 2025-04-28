@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 //Get any password hashed
 Route::get('/hash-password/{password}', [AuthController::class, 'getAnyHashPassword'])->name('auth.getAnyHashPassword');
 
-Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login');
+
+Route::post('/auth/register', [AuthController::class, 'register'])->name('auth.register');
 
 //All calls inside the next group it'll work asking for jwt token
 Route::group(['middleware' => [JwtMiddleware::class]], function () {
@@ -21,6 +23,7 @@ Route::group(['middleware' => [JwtMiddleware::class]], function () {
 
     //This is an example you ought to erase it and create your own
     Route::get('/users', [UsersController::class, 'getAllUsers'])->name('getAllUsers');
+    Route::get('/users/{id}', [UsersController::class, 'getUserById'])->name('getUserById');
 });
 
 Route::prefix('/lotes')->group(function () {

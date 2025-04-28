@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Classes\ApiResponseClass;
 use App\Interfaces\AuthRepositoryInterface;
-use App\Models\RefreshToken;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -33,6 +32,22 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        $validatedData = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
+            'nombre_usuario' => 'required|string|max:255|unique:usuarios,nombre_usuario',
+            'contraseña' => 'required|string',
+        ]);
+
+        $validatedData['contraseña'] = Hash::make($validatedData['contraseña']);
+
+        $user = $this->authRepository->register($validatedData);
+
+        if (!$user) {
+            return ApiResponseClass::sendResponse(false, null, Constants::USER_REGISTRATION_FAILED, 400);
+        }
+
+        return ApiResponseClass::sendResponse(true, $user->toArray(), Constants::USER_REGISTERED_SUCCESSFULLY, 201);
     }
 
     public function login(Request $request)

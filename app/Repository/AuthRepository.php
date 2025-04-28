@@ -4,14 +4,15 @@ namespace App\Repository;
 
 use App\Interfaces\AuthRepositoryInterface;
 use App\Models\RefreshToken;
-
+use App\Models\User;
 
 class AuthRepository implements AuthRepositoryInterface
 {
-    public function register($request)
+    public function register($data)
     {
-
+        return User::create($data);
     }
+
     public function login($request)
     {
     }
