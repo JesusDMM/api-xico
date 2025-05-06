@@ -75,6 +75,7 @@ class LoteController extends Controller
                 'producto_id' => 'required|integer|min:1',
                 'tamaño_lote' => 'required|integer|min:1',
                 'caducidad' => 'required|date',
+                'stock' => 'required|integer|min:0'
             ]);
 
             if (!$this->repo->ExistsById($id)) {

@@ -86,7 +86,8 @@ class EspecificacionIncidenciaController extends Controller
                 'cantidad_defectuosos' => 'required|integer',
                 'causa' => 'required|string',
                 'especificacion' => 'nullable|string',
-                'destino' => 'required|string|in:Reproceso,Reempacado,Desperdicio'
+                'destino' => 'required|string|in:Reproceso,Reempacado,Desperdicio',
+                'salida_id' => 'required|integer'
             ]);
 
             $incidencia = $this->repo->find($id);

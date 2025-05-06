@@ -131,4 +131,11 @@ class SalidaRepository implements SalidaRepositoryInterface
     {
         return Salida::destroy($id);
     }
+
+    public function bulkDelete($salidaId)
+    {
+        return Salida::join('especificacion_incidencias', 'salidas.id', '=', 'especificacion_incidencias.salida_id')
+            ->where('salidas.id', $salidaId)
+            ->sum('especificacion_incidencias.cantidad_defectuosos');
+    }
 }
