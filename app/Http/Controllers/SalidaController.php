@@ -119,6 +119,14 @@ class SalidaController extends Controller
 
             $lote = $this->loteRepo->find($salida->lote_id);
 
+            if (!$lote) {
+                return ApiResponseClass::sendResponse(false, null, Constants::LOTE_NOT_FOUND, 404);
+            }
+
+            $total = $this->salidaRepo->bulkDelete($salida->id);
+
+            $this->loteRepo->increaseStock($lote, $total);
+
             $this->loteRepo->increaseStock($lote, $salida->cantidad);
 
             $deleted = $this->salidaRepo->delete($id);

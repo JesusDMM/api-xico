@@ -60,3 +60,12 @@ Route::group(['middleware' => [JwtMiddleware::class]], function () {
         Route::get('/{categoria}', [ProductoController::class, 'getByCategoria']);
     });
 });
+
+Route::prefix('/salidas')->group(function () {
+    Route::get('', [SalidaController::class, 'index']);
+    Route::get('/{id}', [SalidaController::class, 'show']);
+    Route::get('/lote/{lote_id}', [SalidaController::class, 'getByLoteId']);
+    Route::post('', [SalidaController::class, 'store']);
+    Route::patch('/{id}', [SalidaController::class, 'update']);
+    Route::delete('/{id}', [SalidaController::class, 'destroy']);
+});
